@@ -7,7 +7,10 @@ include .env
 export PROJECT_ROOT ARTIFACTS_DIR CONFIGS_DIR SSH_PUBLIC_KEY_DIR SSH_PRIVATE_KEY_DIR
 export ROUTEROS_VERSION ROUTEROS_VDI_FILENAME ROUTEROS_VDI_PATH ROUTEROS_BOX_NAME ROUTEROS_BOX_FILE
 export VBOX_ROOT_GROUP VM_ROUTERS_GROUP VM_TEMPLATES_GROUP VBOXMANAGE_BIN
-
+export DEBIAN_VERSION DEBIAN_ISO DEBIAN_URL
+export PROXMOX_VERSION PROXMOX_ISO PROXMOX_URL PROXMOX_SHA256
+export TEMPLATE_SERVER TEMPLATE_DESKTOP
+export DELEGACION RED_DELEGACION
 BASH_DIR := $(PROJECT_ROOT)/infrastructure/bash
 BOOTSTRAP_DIR := $(PROJECT_ROOT)/automation/scripts/bootstrap
 
@@ -40,3 +43,31 @@ ssh-keys:
 
 routeros-box:
 	"$(BOOTSTRAP_DIR)/create_mikrotik_box.sh"
+.PHONY: check-versions
+
+check-versions:
+	@echo "Debian: $(DEBIAN_VERSION)"
+	@echo "ISO Debian: $(DEBIAN_ISO)"
+	@echo "URL Debian: $(DEBIAN_URL)"
+	@echo "Proxmox: $(PROXMOX_VERSION)"
+	@echo "ISO Proxmox: $(PROXMOX_ISO)"
+	@echo "URL Proxmox: $(PROXMOX_URL)"
+	@echo "Delegacion: $(DELEGACION)"
+
+# Descargar las ISO de Debian y Proxmox
+.PHONY: download-isos
+
+download-isos:
+	"$(BASH_DIR)/download_isos.sh"
+
+.PHONY: create_templates
+
+create_templates: download-isos
+	"$(BASH_DIR)/create_templates.sh"
+
+.PHONY: deploy_equipment
+
+deploy_equipment: create_templates
+	"$(BASH_DIR)/deploy_equipment.sh"
+	"$(BASH_DIR)/configure_equipment.sh"
+	"$(BASH_DIR)/deploy_proxmox.sh"

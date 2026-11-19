@@ -638,6 +638,15 @@ EOF
 
     done
 
+    if [[ "$name" == "mikrotik3" ]]; then
+        cat >> "$rsc_file" <<EOF
+/ip firewall connection tracking set enabled=yes
+/ip firewall filter add chain=forward action=accept connection-state=established,related comment="Conexiones establecidas"
+/ip firewall filter add chain=forward action=drop connection-state=invalid comment="Conexiones invalidas"
+/ip firewall filter add chain=forward action=drop out-interface=ether5 connection-state=new comment="Proteccion red direccion"
+EOF
+    fi
+
     if [[ "$nat" == true ]]; then
         cat >> "$rsc_file" <<EOF
 /ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade

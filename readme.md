@@ -37,15 +37,15 @@ Confirm that all four VMs appear in VirtualBox, under the `/VirtualCorp/Routers`
 
 | Router | Transit address |
 | --- | --- |
-| `mikrotik0` | `10.1.0.225` |
-| `mikrotik1` | `10.1.0.226` |
-| `mikrotik2` | `10.1.0.230` |
-| `mikrotik3` | `10.1.0.234` |
+| `mikrotik0` | `10.5.0.225` |
+| `mikrotik1` | `10.5.0.226` |
+| `mikrotik2` | `10.5.0.230` |
+| `mikrotik3` | `10.5.0.234` |
 
 From each router, ping the other three addresses. For example:
 
 ```text
-ping 10.1.0.226 count=4
+ping 10.5.0.226 count=4
 ```
 
 Then check internet connectivity from each router:
@@ -55,3 +55,41 @@ ping 1.1.1.1 count=4
 ```
 
 The lab is ready when all four routers can reach one another and each can reach the internet.
+
+## Activity 2 - Equipment deployment
+
+Delegation: 05 - ericbrazofp23
+Network: 10.5.0.0/16
+
+### Additional prerequisites
+
+- xorriso
+- OpenSSL
+- Python 3
+- Hardware virtualization and nested virtualization
+
+### Software versions
+
+- RouterOS CHR 7.21.4
+- Debian 13.7.0
+- Proxmox VE 9.2-1
+
+### Available targets
+
+- make download-isos
+- make create_templates
+- make deploy_equipment
+
+The deployment uses two Debian templates, linked clones
+and an automated Proxmox installation.
+
+The equipment inventory is defined in configs/equipment.conf.
+
+Temporary NAT connections are used during configuration.
+The final equipment network interfaces use internal networks.
+
+Proxmox management address: 10.5.0.133/26
+Gateway: 10.5.0.129
+
+Passwords, private SSH keys, ISO images and virtual disks
+must not be committed to the repository.

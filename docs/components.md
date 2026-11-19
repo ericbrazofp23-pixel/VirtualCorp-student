@@ -91,3 +91,29 @@ Each directory currently contains only a `.gitkeep` placeholder. No Ansible play
 2. Run `make ssh-keys` to create the SSH key pairs.
 3. Run `make deploy-routers` to download the CHR image when needed and create the lab routers.
 4. Use `make delete-routers` or `make reset-routers` to remove or recreate the router group.
+
+## Activity 2 components
+
+| File | Functionality |
+| --- | --- |
+| configs/equipment.conf | Inventory of virtual equipment, networks and resources |
+| configs/debian/server.cfg | Debian Server unattended installation |
+| configs/debian/desktop.cfg | Debian Desktop unattended installation |
+| configs/debian/setup_ssh.sh | SSH access configuration |
+| configs/debian/setup_identity.sh | Individual hostname, machine ID and SSH host keys |
+| configs/debian/isolinux/ | BIOS boot configuration |
+| configs/debian/grub/ | UEFI boot configuration |
+| download_isos.sh | ISO downloads and integrity verification |
+| prepare_preseed.sh | Generates Debian installation configuration |
+| build_debian_iso.sh | Builds unattended Debian ISO images |
+| create_templates.sh | Creates Debian templates and snapshots |
+| deploy_equipment.sh | Creates linked clones from the templates |
+| configure_equipment.sh | Configures individual equipment identities |
+| build_proxmox_iso.sh | Generates the automated Proxmox ISO |
+| deploy_proxmox.sh | Deploys the Proxmox server |
+
+The lab contains 22 Debian linked clones and one Proxmox
+server in addition to the four MikroTik routers.
+
+The existing deployment has been tested incrementally.
+A complete clean deployment remains to be validated.
